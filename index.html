@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AMENARDI - Gestion de Chantier</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f4f7f6; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .card { background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); width: 100%; max-width: 400px; }
+        h2 { color: #333; margin-bottom: 1.5rem; text-align: center; }
+        label { display: block; margin-bottom: 0.5rem; font-weight: 600; color: #555; }
+        input, select { width: 100%; padding: 12px; margin-bottom: 1.2rem; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; }
+        button { width: 100%; padding: 14px; background: #007bff; color: white; border: none; border-radius: 6px; font-size: 1rem; cursor: pointer; transition: background 0.3s; }
+        button:hover { background: #0056b3; }
+        #status { text-align: center; margin-top: 1rem; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2>AMENARDI Rapport</h2>
+    <form id="uploadForm">
+        <label>Chantier (Location)</label>
+        <input type="text" name="location" placeholder="Ex: Morshan, Tanger Balia..." required>
+
+        <label>Photo de la feuille d'appel</label>
+        <!-- 'capture="environment"' triggers the back camera on Android/iOS -->
+        <input type="file" name="data" accept="image/*" capture="environment" required>
+
+        <button type="submit" id="submitBtn">Envoyer au Bureau</button>
+    </form>
+    <div id="status"></div>
+</div>
+
+<script>
+    const form = document.getElementById('uploadForm');
+    const status = document.getElementById('status');
+    const btn = document.getElementById('submitBtn');
+
+    form.onsubmit = async (e) => {
+        e.preventDefault();
+        btn.disabled = true;
+        btn.innerText = "Envoi en cours...";
+        status.innerText = "🚀 Traitement de l'image haute résolution...";
+
+        const formData = new FormData(form);
+
+        try {
+            // REPLACE THE URL BELOW WITH YOUR n8n PRODUCTION WEBHOOK URL
+            const response = await fetch('https://jaber-357.app.n8n.cloud/webhook/amenardi-upload', {
+                method: 'POST',
+                body: formData
+            });
+
+            if (response.ok) {
+                status.style.color = "green";
+                status.innerText = "✅ Rapport envoyé avec succès !";
+                form.reset();
+            } else {
+                throw new Error();
+            }
+        } catch (err) {
+            status.style.color = "red";
+            status.innerText = "❌ Erreur d'envoi. Vérifiez votre connexion.";
+        } finally {
+            btn.disabled = false;
+            btn.innerText = "Envoyer le Rapport";
+        }
+    };
+</script>
+
+</body>
+</html>
