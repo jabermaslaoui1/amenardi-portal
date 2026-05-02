@@ -18,16 +18,13 @@
 <body>
 
 <div class="card">
-    <h2>AMENARDI Rapport</h2>
+    <h2>Attendance - AMENARDI</h2>
     <form id="uploadForm">
-        <label>Chantier (Location)</label>
-        <input type="text" name="location" placeholder="Ex: Morshan, Tanger Balia..." required>
-
-        <label>Photo de la feuille d'appel</label>
+        <label>Photo of the attendance sheet</label>
         <!-- 'capture="environment"' triggers the back camera on Android/iOS -->
         <input type="file" name="data" accept="image/*" capture="environment" required>
 
-        <button type="submit" id="submitBtn">Envoyer au Bureau</button>
+        <button type="submit" id="submitBtn">Submit</button>
     </form>
     <div id="status"></div>
 </div>
