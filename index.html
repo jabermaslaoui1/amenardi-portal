@@ -3,68 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AMENARDI - Gestion de Chantier</title>
+    <title>AMENARDI - Portail Chantier</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f4f7f6; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .card { background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); width: 100%; max-width: 400px; }
-        h2 { color: #333; margin-bottom: 1.5rem; text-align: center; }
-        label { display: block; margin-bottom: 0.5rem; font-weight: 600; color: #555; }
-        input, select { width: 100%; padding: 12px; margin-bottom: 1.2rem; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; }
-        button { width: 100%; padding: 14px; background: #007bff; color: white; border: none; border-radius: 6px; font-size: 1rem; cursor: pointer; transition: background 0.3s; }
-        button:hover { background: #0056b3; }
-        #status { text-align: center; margin-top: 1rem; font-weight: bold; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f4f7f6; display: flex; flex-direction: column; align-items: center; padding: 20px; margin: 0; }
+        .card { background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 100%; max-width: 400px; margin-bottom: 20px; }
+        h2 { color: #333; font-size: 1.2rem; margin-bottom: 1rem; text-align: center; border-bottom: 2px solid #007bff; padding-bottom: 5px; }
+        label { display: block; margin-bottom: 5px; font-weight: 600; font-size: 0.9rem; }
+        input { width: 100%; padding: 10px; margin-bottom: 1rem; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; }
+        button { width: 100%; padding: 12px; background: #007bff; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; }
+        .status { text-align: center; margin-top: 10px; font-size: 0.85rem; font-weight: bold; }
     </style>
 </head>
 <body>
 
-<div class="card">
-    <h2>Attendance - AMENARDI</h2>
-    <form id="uploadForm">
-        <label>Photo of the attendance sheet</label>
-        <!-- 'capture="environment"' triggers the back camera on Android/iOS -->
-        <input type="file" name="data" accept="image/*" capture="environment" required>
+    <div class="card">
+        <h2>📋 Attendance</h2>
+        <form id="attendanceForm">
+            <label>Photo of the attendance sheet</label>
+            <input type="file" name="data" accept="image/*" capture="environment" required>
+            <button type="submit">Send...</button>
+        </form>
+        <div id="attendanceStatus" class="status"></div>
+    </div>
 
-        <button type="submit" id="submitBtn">Submit</button>
-    </form>
-    <div id="status"></div>
-</div>
+    <div class="card">
+        <h2>🧾 Invoice</h2>
+        <form id="invoiceForm">
+           
+            <label>Photo of the invoice</label>
+            <input type="file" name="data" accept="image/*" capture="environment" required>
+            <button type="submit" style="background: #28a745;">Send...</button>
+        </form>
+        <div id="invoiceStatus" class="status"></div>
+    </div>
 
-<script>
-    const form = document.getElementById('uploadForm');
-    const status = document.getElementById('status');
-    const btn = document.getElementById('submitBtn');
+    <script>
+        async function handleUpload(formId, statusId, webhookUrl) {
+            const form = document.getElementById(formId);
+            const status = document.getElementById(statusId);
+            
+            form.onsubmit = async (e) => {
+                e.preventDefault();
+                status.innerText = "⏳ Submitting...";
+                const formData = new FormData(form);
 
-    form.onsubmit = async (e) => {
-        e.preventDefault();
-        btn.disabled = true;
-        btn.innerText = "Envoi en cours...";
-        status.innerText = "🚀 Traitement de l'image haute résolution...";
-
-        const formData = new FormData(form);
-
-        try {
-            // REPLACE THE URL BELOW WITH YOUR n8n PRODUCTION WEBHOOK URL
-            const response = await fetch('https://jaber-357.app.n8n.cloud/webhook/amenardi-upload', {
-                method: 'POST',
-                body: formData
-            });
-
-            if (response.ok) {
-                status.style.color = "green";
-                status.innerText = "✅ Rapport envoyé avec succès !";
-                form.reset();
-            } else {
-                throw new Error();
-            }
-        } catch (err) {
-            status.style.color = "red";
-            status.innerText = "❌ Erreur d'envoi. Vérifiez votre connexion.";
-        } finally {
-            btn.disabled = false;
-            btn.innerText = "Envoyer le Rapport";
+                try {
+                    const response = await fetch(webhookUrl, { method: 'POST', body: formData });
+                    if (response.ok) {
+                        status.style.color = "green";
+                        status.innerText = "✅ Sent successfully !";
+                        form.reset();
+                    } else { throw new Error(); }
+                } catch (err) {
+                    status.style.color = "red";
+                    status.innerText = "❌ Error. Verify your connection.";
+                }
+            };
         }
-    };
-</script>
 
+        // --- CONFIGURE YOUR URLS HERE ---
+        // Replace with your actual Production URLs from your Webhook nodes
+        handleUpload('attendanceForm', 'attendanceStatus', 'https://jaber-357.app.n8n.cloud/webhook/amenardi-upload');
+        handleUpload('invoiceForm', 'invoiceStatus', 'https://jaber-357.app.n8n.cloud/webhook/amenardi-invoices');
+    </script>
 </body>
 </html>
