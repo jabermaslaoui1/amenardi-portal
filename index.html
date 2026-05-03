@@ -6,50 +6,39 @@
     <title>AMENARDI - Portail Chantier</title>
     <style>
         body { 
-            font-family: 'Montserrat'; 
+            font-family: 'Segoe UI', sans-serif; 
             background: #f4f7f6; 
             display: flex; 
-            /* Set horizontal direction */
-            flex-direction: row; 
-            /* Center horizontally */
+            /* Changed to column so logo stays ABOVE the forms */
+            flex-direction: column; 
             justify-content: center; 
-            /* Center vertically */
             align-items: center; 
-            /* Allow stacking on mobile devices */
-            flex-wrap: wrap; 
-            /* Space between the two cards */
-            gap: 30px; 
-            /* Force body to take full screen height for vertical centering */
             min-height: 100vh; 
             margin: 0; 
             padding: 20px;
             box-sizing: border-box;
         }
 
-        /* Branded Logo Container */
+        /* Logo Styling */
         .logo-container {
             text-align: center;
             margin-bottom: 30px;
-            margin-top: 10px;
         }
         .logo-container img {
-            max-width: 150px; /* Controls the size of the logo */
+            max-width: 200px; /* Adjust size as needed */
             height: auto;
         }
 
-        /* Forms Container (Horizontal Row on Desktop) */
-        .forms-row {
+        /* Container for the two forms */
+        .forms-container {
             display: flex;
             flex-direction: row;
-            justify-content: center;
-            align-items: flex-start;
             flex-wrap: wrap;
+            justify-content: center;
             gap: 30px;
             width: 100%;
         }
 
-
-   
         .card { 
             background: white; 
             padding: 1.5rem; 
@@ -58,6 +47,7 @@
             width: 100%; 
             max-width: 400px; 
         }
+
         h2 { color: #333; font-size: 1.2rem; margin-bottom: 1rem; text-align: center; border-bottom: 2px solid #007bff; padding-bottom: 5px; }
         label { display: block; margin-bottom: 5px; font-weight: 600; font-size: 0.9rem; }
         input { width: 100%; padding: 10px; margin-bottom: 1rem; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; }
@@ -67,24 +57,30 @@
 </head>
 <body>
 
-    <div class="card">
-        <h2>📋 Attendance</h2>
-        <form id="attendanceForm">
-            <label>Photo of the attendance sheet</label>
-            <input type="file" name="data" accept="image/*" multiple required>
-            <button type="submit">Send...</button>
-        </form>
-        <div id="attendanceStatus" class="status"></div>
+    <div class="logo-container">
+        <img src="logo.png" alt="AMENARDI Logo">
     </div>
 
-    <div class="card">
-        <h2>🧾 Invoice</h2>
-        <form id="invoiceForm">
-            <label>Photo of the invoice</label>
-            <input type="file" name="data" accept="image/*" multiple required>
-            <button type="submit" style="background: #28a745;">Send...</button>
-        </form>
-        <div id="invoiceStatus" class="status"></div>
+    <div class="forms-container">
+        <div class="card">
+            <h2>📋 Attendance</h2>
+            <form id="attendanceForm">
+                <label>Photo of the attendance sheet</label>
+                <input type="file" name="data" accept="image/*" multiple required>
+                <button type="submit">Send...</button>
+            </form>
+            <div id="attendanceStatus" class="status"></div>
+        </div>
+
+        <div class="card">
+            <h2>🧾 Invoice</h2>
+            <form id="invoiceForm">
+                <label>Photo of the invoice</label>
+                <input type="file" name="data" accept="image/*" multiple required>
+                <button type="submit" style="background: #28a745;">Send...</button>
+            </form>
+            <div id="invoiceStatus" class="status"></div>
+        </div>
     </div>
 
     <script>
@@ -94,6 +90,7 @@
             
             form.onsubmit = async (e) => {
                 e.preventDefault();
+                status.style.color = "black";
                 status.innerText = "⏳ Submitting...";
                 const formData = new FormData(form);
 
