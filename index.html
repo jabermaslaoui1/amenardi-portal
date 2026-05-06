@@ -9,7 +9,6 @@
             font-family: 'Segoe UI', sans-serif; 
             background: #f4f7f6; 
             display: flex; 
-            /* Changed to column so logo stays ABOVE the forms */
             flex-direction: column; 
             justify-content: center; 
             align-items: center; 
@@ -19,17 +18,15 @@
             box-sizing: border-box;
         }
 
-        /* Logo Styling */
         .logo-container {
             text-align: center;
             margin-bottom: 30px;
         }
         .logo-container img {
-            max-width: 200px; /* Adjust size as needed */
+            max-width: 200px; 
             height: auto;
         }
 
-        /* Container for the two forms */
         .forms-container {
             display: flex;
             flex-direction: row;
@@ -50,7 +47,8 @@
 
         h2 { color: #333; font-size: 1.2rem; margin-bottom: 1rem; text-align: center; border-bottom: 2px solid #007bff; padding-bottom: 5px; }
         label { display: block; margin-bottom: 5px; font-weight: 600; font-size: 0.9rem; }
-        input { width: 100%; padding: 10px; margin-bottom: 1rem; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; }
+        /* Added 'select' here to keep styling consistent */
+        input, select { width: 100%; padding: 10px; margin-bottom: 1rem; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; background-color: white; }
         button { width: 100%; padding: 12px; background: #007bff; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; }
         .status { text-align: center; margin-top: 10px; font-size: 0.85rem; font-weight: bold; }
     </style>
@@ -62,6 +60,7 @@
     </div>
 
     <div class="forms-container">
+        <!-- Attendance Form (No changes) -->
         <div class="card">
             <h2>📋 Attendance</h2>
             <form id="attendanceForm">
@@ -72,10 +71,18 @@
             <div id="attendanceStatus" class="status"></div>
         </div>
 
+        <!-- Invoice Form (Updated with Dropdown) -->
         <div class="card">
             <h2>🧾 Invoice</h2>
             <form id="invoiceForm">
-                <label>Photo of the invoice</label>
+                <label>Type of Document</label>
+                <select name="doc_type" required>
+                    <option value="" disabled selected>Choose type...</option>
+                    <option value="facture d'achat">Facture d'achat</option>
+                    <option value="facture de vente">Facture de vente</option>
+                </select>
+
+                <label>Photo of the document</label>
                 <input type="file" name="data" accept="image/*" multiple required>
                 <button type="submit" style="background: #28a745;">Send...</button>
             </form>
@@ -109,7 +116,7 @@
         }
 
         handleUpload('attendanceForm', 'attendanceStatus', 'https://jaber-357.app.n8n.cloud/webhook/amenardi-upload');
-        handleUpload('invoiceForm', 'invoiceStatus', 'https://jaber-357.app.n8n.cloud/webhook/amenardi-invoices');
+        handleUpload('invoiceForm', 'invoiceStatus', 'https://jaber-357.app.n8n.cloud/webhook-test/amenardi-invoices');
     </script>
 </body>
 </html>
