@@ -47,7 +47,6 @@
 
         h2 { color: #333; font-size: 1.2rem; margin-bottom: 1rem; text-align: center; border-bottom: 2px solid #007bff; padding-bottom: 5px; }
         label { display: block; margin-bottom: 5px; font-weight: 600; font-size: 0.9rem; }
-        /* Added 'select' here to keep styling consistent */
         input, select { width: 100%; padding: 10px; margin-bottom: 1rem; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; background-color: white; }
         button { width: 100%; padding: 12px; background: #007bff; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; }
         .status { text-align: center; margin-top: 10px; font-size: 0.85rem; font-weight: bold; }
@@ -60,7 +59,7 @@
     </div>
 
     <div class="forms-container">
-        <!-- Attendance Form (No changes) -->
+        <!-- Attendance Form -->
         <div class="card">
             <h2>📋 Attendance</h2>
             <form id="attendanceForm">
@@ -71,15 +70,19 @@
             <div id="attendanceStatus" class="status"></div>
         </div>
 
-        <!-- Invoice Form (Updated with Dropdown) -->
+        <!-- Invoice Form (Updated Dropdown) -->
         <div class="card">
-            <h2>🧾 Invoice</h2>
+            <h2>🧾 Documents</h2>
             <form id="invoiceForm">
                 <label>Type of Document</label>
                 <select name="doc_type" required>
                     <option value="" disabled selected>Choose type...</option>
-                    <option value="facture d'achat">Facture d'achat</option>
-                    <option value="facture de vente">Facture de vente</option>
+                    <option value="facture_achat">Factures d'achat</option>
+                    <option value="bon_achat">Bons d'achat</option>
+                    <option value="facture_vente">Factures de vente</option>
+                    <option value="bon_vente">Bons de vente</option>
+                    <option value="facture_avoir">Factures d'avoir</option>
+                    <option value="bon_avoir">Bons d'avoir</option>
                 </select>
 
                 <label>Photo of the document</label>
@@ -115,6 +118,7 @@
             };
         }
 
+        // Initialize the upload handlers
         handleUpload('attendanceForm', 'attendanceStatus', 'https://jaber-357.app.n8n.cloud/webhook/amenardi-upload');
         handleUpload('invoiceForm', 'invoiceStatus', 'https://jaber-357.app.n8n.cloud/webhook-test/updated-ocr');
     </script>
