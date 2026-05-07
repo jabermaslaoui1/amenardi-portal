@@ -43,69 +43,13 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
             width: 100%; 
             max-width: 400px; 
-            /* Added: Centers inline elements like the status text */
-            text-align: center; 
         }
 
-        h2 { 
-            color: #333; 
-            font-size: 1.2rem; 
-            margin-bottom: 1rem; 
-            text-align: center; 
-            border-bottom: 2px solid #007bff; 
-            padding-bottom: 10px; 
-        }
-
-        label { 
-            display: block; 
-            margin-bottom: 8px; 
-            font-weight: 600; 
-            font-size: 0.9rem; 
-            /* Updated: Centers the label text */
-            text-align: center; 
-        }
-
-        input, select { 
-            width: 100%; 
-            padding: 10px; 
-            margin-bottom: 1.2rem; 
-            border: 1px solid #ddd; 
-            border-radius: 6px; 
-            box-sizing: border-box; 
-            background-color: white;
-            /* Added: Centers the text inside text/select inputs where supported */
-            text-align: center; 
-            text-align-last: center; /* For Select dropdowns */
-        }
-
-        /* Special handling for file input to look more centered */
-        input[type="file"] {
-            cursor: pointer;
-            line-height: 1.5;
-        }
-
-        button { 
-            width: 100%; 
-            padding: 12px; 
-            background: #007bff; 
-            color: white; 
-            border: none; 
-            border-radius: 6px; 
-            cursor: pointer; 
-            font-weight: bold; 
-            transition: background 0.3s ease;
-        }
-
-        button:hover {
-            filter: brightness(90%);
-        }
-
-        .status { 
-            text-align: center; 
-            margin-top: 15px; 
-            font-size: 0.85rem; 
-            font-weight: bold; 
-        }
+        h2 { color: #333; font-size: 1.2rem; margin-bottom: 1rem; text-align: center; border-bottom: 2px solid #007bff; padding-bottom: 5px; }
+        label { display: block; margin-bottom: 5px; font-weight: 600; font-size: 0.9rem; }
+        input, select { width: 100%; padding: 10px; margin-bottom: 1rem; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; background-color: white; }
+        button { width: 100%; padding: 12px; background: #007bff; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; }
+        .status { text-align: center; margin-top: 10px; font-size: 0.85rem; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -115,6 +59,7 @@
     </div>
 
     <div class="forms-container">
+        <!-- Attendance Form -->
         <div class="card">
             <h2>📋 Attendance</h2>
             <form id="attendanceForm">
@@ -125,6 +70,7 @@
             <div id="attendanceStatus" class="status"></div>
         </div>
 
+        <!-- Invoice Form (Updated Dropdown) -->
         <div class="card">
             <h2>🧾 Documents</h2>
             <form id="invoiceForm">
@@ -163,7 +109,7 @@
                     const response = await fetch(webhookUrl, { method: 'POST', body: formData });
                     if (response.ok) {
                         status.style.color = "green";
-                        status.innerText = "✅ Sent successfully!";
+                        status.innerText = "✅ Sent successfully !";
                         form.reset();
                     } else { throw new Error(); }
                 } catch (err) {
@@ -173,6 +119,7 @@
             };
         }
 
+        // Initialize the upload handlers
         handleUpload('attendanceForm', 'attendanceStatus', 'https://jaber-357.app.n8n.cloud/webhook/amenardi-upload');
         handleUpload('invoiceForm', 'invoiceStatus', 'https://jaber-357.app.n8n.cloud/webhook/updated-ocr');
     </script>
