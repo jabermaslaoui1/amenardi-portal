@@ -61,11 +61,11 @@
     <div class="forms-container">
         <!-- Attendance Form -->
         <div class="card">
-            <h2>📋 Attendance</h2>
+            <h2>📋 Pointage</h2>
             <form id="attendanceForm">
-                <label>Photo of the attendance sheet</label>
+                <label>Photo de la feuille de présence</label>
                 <input type="file" name="data" accept="image/*" multiple required>
-                <button type="submit">Send...</button>
+                <button type="submit">Envoyer...</button>
             </form>
             <div id="attendanceStatus" class="status"></div>
         </div>
@@ -74,9 +74,9 @@
         <div class="card">
             <h2>🧾 Documents</h2>
             <form id="invoiceForm">
-                <label>Type of Document</label>
+                <label>Type de document</label>
                 <select name="doc_type" required>
-                    <option value="" disabled selected>Choose type...</option>
+                    <option value="" disabled selected>Choisissez le type...</option>
                     <option value="facture_achat">Factures d'achat</option>
                     <option value="bon_achat">Bons d'achat</option>
                     <option value="facture_vente">Factures de vente</option>
@@ -86,9 +86,9 @@
                     <option value="extracteur_de_texte">Extracteur de texte</option>
                 </select>
 
-                <label>Photo of the document</label>
+                <label>Photo du document</label>
                 <input type="file" name="data" accept="image/*" multiple required>
-                <button type="submit" style="background: #28a745;">Send...</button>
+                <button type="submit" style="background: #28a745;">Envoyer...</button>
             </form>
             <div id="invoiceStatus" class="status"></div>
         </div>
