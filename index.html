@@ -1,127 +1,512 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AMENARDI - Portail Chantier</title>
-    <style>
-        body { 
-            font-family: 'Segoe UI', sans-serif; 
-            background: #f4f7f6; 
-            display: flex; 
-            flex-direction: column; 
-            justify-content: center; 
-            align-items: center; 
-            min-height: 100vh; 
-            margin: 0; 
-            padding: 20px;
-            box-sizing: border-box;
-        }
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AMENARDI — Portail Chantier</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-        .logo-container {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        .logo-container img {
-            max-width: 200px; 
-            height: auto;
-        }
+    :root {
+      --bg:         #0d0d0d;
+      --surface:    #141414;
+      --surface2:   #1a1a1a;
+      --border:     #2a2a2a;
+      --accent:     #c9a84c;
+      --accent-dim: rgba(201,168,76,0.10);
+      --text:       #e8e2d9;
+      --muted:      #6b6560;
+      --success:    #27ae60;
+      --error:      #c0392b;
+    }
 
-        .forms-container {
-            display: flex;
-            flex-direction: row;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 30px;
-            width: 100%;
-        }
+    html, body {
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Mono', monospace;
+    }
 
-        .card { 
-            background: white; 
-            padding: 1.5rem; 
-            border-radius: 12px; 
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
-            width: 100%; 
-            max-width: 400px; 
-        }
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 3rem 1.5rem 4rem;
+      background-image:
+        radial-gradient(ellipse 80% 50% at 50% 0%, rgba(201,168,76,0.07) 0%, transparent 65%),
+        repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(255,255,255,0.012) 39px, rgba(255,255,255,0.012) 40px),
+        repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(255,255,255,0.012) 39px, rgba(255,255,255,0.012) 40px);
+    }
 
-        h2 { color: #333; font-size: 1.2rem; margin-bottom: 1rem; text-align: center; border-bottom: 2px solid #007bff; padding-bottom: 5px; }
-        label { display: block; margin-bottom: 5px; font-weight: 600; font-size: 0.9rem; }
-        input, select { width: 100%; padding: 10px; margin-bottom: 1rem; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; background-color: white; }
-        button { width: 100%; padding: 12px; background: #007bff; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; }
-        .status { text-align: center; margin-top: 10px; font-size: 0.85rem; font-weight: bold; }
-    </style>
+    /* ── HEADER ── */
+    .header {
+      text-align: center;
+      margin-bottom: 3.5rem;
+      animation: fadeUp 0.7s cubic-bezier(0.22,1,0.36,1) both;
+    }
+
+    .logo-container {
+      margin-bottom: 1.4rem;
+    }
+
+    .logo-container img {
+      max-width: 140px;
+      height: auto;
+      filter: brightness(0) invert(1);
+      opacity: 0.85;
+    }
+
+    .brand {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.45em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.5rem;
+    }
+
+    .page-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      font-size: 2.8rem;
+      letter-spacing: -0.01em;
+      line-height: 1.1;
+      color: var(--text);
+    }
+
+    .page-title em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    .header-divider {
+      width: 40px;
+      height: 1px;
+      background: var(--accent);
+      margin: 1.2rem auto 0;
+      opacity: 0.5;
+    }
+
+    /* ── GRID ── */
+    .forms-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 2rem;
+      width: 100%;
+      max-width: 1000px;
+    }
+
+    /* ── CARD ── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 2.5rem 2.8rem;
+      width: 100%;
+      max-width: 420px;
+      position: relative;
+      animation: fadeUp 0.7s cubic-bezier(0.22,1,0.36,1) both;
+    }
+
+    .card:nth-child(1) { animation-delay: 0.1s; }
+    .card:nth-child(2) { animation-delay: 0.2s; }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── CARD TITLE ── */
+    .card-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 400;
+      font-size: 1.5rem;
+      color: var(--text);
+      margin-bottom: 0.3rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .card-title .icon {
+      font-size: 1rem;
+      opacity: 0.7;
+    }
+
+    .card-divider {
+      width: 30px;
+      height: 1px;
+      background: var(--accent);
+      opacity: 0.4;
+      margin-bottom: 2rem;
+    }
+
+    /* ── LABEL ── */
+    label {
+      display: block;
+      font-size: 0.62rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.6rem;
+    }
+
+    /* ── SELECT ── */
+    .select-wrap {
+      position: relative;
+      margin-bottom: 1.6rem;
+    }
+
+    select {
+      width: 100%;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-bottom: 1px solid var(--accent);
+      color: var(--text);
+      font-family: 'DM Mono', monospace;
+      font-size: 0.78rem;
+      padding: 0.7rem 2.2rem 0.7rem 0.8rem;
+      outline: none;
+      appearance: none;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    select:focus { background: var(--accent-dim); border-color: var(--accent); }
+
+    select option { background: var(--surface2); color: var(--text); }
+
+    .select-arrow {
+      position: absolute;
+      right: 0.8rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--accent);
+      font-size: 0.7rem;
+      pointer-events: none;
+    }
+
+    /* ── FILE UPLOAD ── */
+    .file-wrap { margin-bottom: 1.8rem; }
+
+    .file-area {
+      border: 1px dashed var(--border);
+      padding: 1.8rem 1.2rem;
+      text-align: center;
+      cursor: pointer;
+      position: relative;
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .file-area:hover, .file-area.dragover {
+      border-color: var(--accent);
+      background: var(--accent-dim);
+    }
+
+    .file-area input[type="file"] {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+      width: 100%;
+      height: 100%;
+    }
+
+    .file-icon { font-size: 1.4rem; opacity: 0.35; display: block; margin-bottom: 0.4rem; }
+
+    .file-hint {
+      font-size: 0.65rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .file-hint strong { color: var(--accent); font-weight: 400; }
+
+    .file-name {
+      margin-top: 0.6rem;
+      font-size: 0.65rem;
+      color: var(--text);
+      opacity: 0;
+      transition: opacity 0.3s;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .file-name.visible { opacity: 1; }
+
+    /* ── BUTTON ── */
+    button[type="submit"] {
+      width: 100%;
+      background: var(--accent);
+      color: #0d0d0d;
+      border: none;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      padding: 1rem;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.15s;
+    }
+
+    button[type="submit"]:hover   { opacity: 0.85; }
+    button[type="submit"]:active  { transform: scale(0.99); }
+    button[type="submit"]:disabled { opacity: 0.35; cursor: not-allowed; }
+
+    .btn-inner { display: flex; align-items: center; justify-content: center; gap: 0.6rem; }
+
+    .spinner {
+      width: 11px; height: 11px;
+      border: 1.5px solid rgba(0,0,0,0.25);
+      border-top-color: #0d0d0d;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      display: none;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── STATUS ── */
+    .status {
+      text-align: center;
+      margin-top: 0.9rem;
+      font-size: 0.65rem;
+      letter-spacing: 0.08em;
+      min-height: 1rem;
+      transition: color 0.3s;
+    }
+
+    /* ── TOAST ── */
+    .toast {
+      position: fixed;
+      bottom: 2rem; left: 50%;
+      transform: translateX(-50%) translateY(16px);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      font-size: 0.68rem;
+      letter-spacing: 0.08em;
+      padding: 0.75rem 1.5rem;
+      opacity: 0;
+      transition: opacity 0.3s, transform 0.3s;
+      pointer-events: none;
+      white-space: nowrap;
+    }
+    .toast.show   { opacity: 1; transform: translateX(-50%) translateY(0); }
+    .toast.success { border-color: var(--success); color: var(--success); }
+    .toast.error   { border-color: var(--error);   color: var(--error); }
+
+    /* ── FOOTER ── */
+    .footer {
+      margin-top: 3rem;
+      font-size: 0.58rem;
+      color: var(--muted);
+      letter-spacing: 0.12em;
+      opacity: 0.5;
+      text-align: center;
+      animation: fadeUp 0.7s cubic-bezier(0.22,1,0.36,1) 0.35s both;
+    }
+
+    @media (max-width: 500px) {
+      .card { padding: 2rem 1.5rem; }
+      .page-title { font-size: 2.1rem; }
+    }
+  </style>
 </head>
 <body>
 
+  <!-- HEADER -->
+  <div class="header">
     <div class="logo-container">
-        <img src="logo.png" alt="AMENARDI Logo">
+      <img src="logo.png" alt="AMENARDI Logo"/>
+    </div>
+    <p class="brand">Portail Chantier</p>
+    <h1 class="page-title">Envoi de <em>Documents</em></h1>
+    <div class="header-divider"></div>
+  </div>
+
+  <!-- CARDS -->
+  <div class="forms-container">
+
+    <!-- Attendance Form -->
+    <div class="card">
+      <h2 class="card-title"><span class="icon">📋</span> Pointage</h2>
+      <div class="card-divider"></div>
+      <form id="attendanceForm" novalidate>
+        <div class="file-wrap">
+          <label>Photo de la feuille de présence <span style="color:var(--accent)">*</span></label>
+          <div class="file-area" id="fileArea1">
+            <input type="file" name="data" accept="image/*" multiple required id="fileInput1"/>
+            <span class="file-icon">⬆</span>
+            <p class="file-hint">Glissez ici ou <strong>parcourir</strong></p>
+            <p class="file-name" id="fileName1">— aucun fichier —</p>
+          </div>
+        </div>
+        <button type="submit" id="submitBtn1">
+          <span class="btn-inner">
+            <span class="spinner" id="spinner1"></span>
+            <span id="btnText1">Envoyer</span>
+          </span>
+        </button>
+      </form>
+      <div id="attendanceStatus" class="status"></div>
     </div>
 
-    <div class="forms-container">
-        <!-- Attendance Form -->
-        <div class="card">
-            <h2>📋 Pointage</h2>
-            <form id="attendanceForm">
-                <label>Photo de la feuille de présence</label>
-                <input type="file" name="data" accept="image/*" multiple required>
-                <button type="submit">Envoyer...</button>
-            </form>
-            <div id="attendanceStatus" class="status"></div>
+    <!-- Invoice / Documents Form -->
+    <div class="card">
+      <h2 class="card-title"><span class="icon">🧾</span> Documents</h2>
+      <div class="card-divider"></div>
+      <form id="invoiceForm" novalidate>
+
+        <label>Type de document <span style="color:var(--accent)">*</span></label>
+        <div class="select-wrap" style="margin-bottom:1.6rem">
+          <select name="doc_type" required id="docType">
+            <option value="" disabled selected>Choisissez le type…</option>
+            <option value="facture_achat">Factures d'achat</option>
+            <option value="bon_achat">Bons d'achat</option>
+            <option value="facture_vente">Factures de vente</option>
+            <option value="bon_vente">Bons de vente</option>
+            <option value="facture_avoir">Factures d'avoir</option>
+            <option value="bon_avoir">Bons d'avoir</option>
+            <option value="extracteur_de_texte">Extracteur de texte</option>
+          </select>
+          <span class="select-arrow">▾</span>
         </div>
 
-        <!-- Invoice Form (Updated Dropdown) -->
-        <div class="card">
-            <h2>🧾 Documents</h2>
-            <form id="invoiceForm">
-                <label>Type de document</label>
-                <select name="doc_type" required>
-                    <option value="" disabled selected>Choisissez le type...</option>
-                    <option value="facture_achat">Factures d'achat</option>
-                    <option value="bon_achat">Bons d'achat</option>
-                    <option value="facture_vente">Factures de vente</option>
-                    <option value="bon_vente">Bons de vente</option>
-                    <option value="facture_avoir">Factures d'avoir</option>
-                    <option value="bon_avoir">Bons d'avoir</option>
-                    <option value="extracteur_de_texte">Extracteur de texte</option>
-                </select>
-
-                <label>Photo du document</label>
-                <input type="file" name="data" accept="image/*" multiple required>
-                <button type="submit" style="background: #28a745;">Envoyer...</button>
-            </form>
-            <div id="invoiceStatus" class="status"></div>
+        <div class="file-wrap">
+          <label>Photo du document <span style="color:var(--accent)">*</span></label>
+          <div class="file-area" id="fileArea2">
+            <input type="file" name="data" accept="image/*" multiple required id="fileInput2"/>
+            <span class="file-icon">⬆</span>
+            <p class="file-hint">Glissez ici ou <strong>parcourir</strong></p>
+            <p class="file-name" id="fileName2">— aucun fichier —</p>
+          </div>
         </div>
+
+        <button type="submit" id="submitBtn2">
+          <span class="btn-inner">
+            <span class="spinner" id="spinner2"></span>
+            <span id="btnText2">Envoyer</span>
+          </span>
+        </button>
+      </form>
+      <div id="invoiceStatus" class="status"></div>
     </div>
 
-    <script>
-        async function handleUpload(formId, statusId, webhookUrl) {
-            const form = document.getElementById(formId);
-            const status = document.getElementById(statusId);
-            
-            form.onsubmit = async (e) => {
-                e.preventDefault();
-                status.style.color = "black";
-                status.innerText = "⏳ Submitting...";
-                const formData = new FormData(form);
+  </div>
 
-                try {
-                    const response = await fetch(webhookUrl, { method: 'POST', body: formData });
-                    if (response.ok) {
-                        status.style.color = "green";
-                        status.innerText = "✅ Sent successfully !";
-                        form.reset();
-                    } else { throw new Error(); }
-                } catch (err) {
-                    status.style.color = "red";
-                    status.innerText = "❌ Error. Verify your connection.";
-                }
-            };
+  <p class="footer">AMENARDI © — Portail interne chantier</p>
+  <div class="toast" id="toast"></div>
+
+  <script>
+    // ── Toast ──
+    const toast = document.getElementById('toast');
+    function showToast(msg, type = 'success') {
+      toast.textContent = msg;
+      toast.className = `toast ${type} show`;
+      setTimeout(() => toast.classList.remove('show'), 3500);
+    }
+
+    // ── File display helper ──
+    function bindFileDisplay(inputId, areaId, nameId) {
+      const input = document.getElementById(inputId);
+      const area  = document.getElementById(areaId);
+      const name  = document.getElementById(nameId);
+
+      input.addEventListener('change', () => {
+        if (input.files.length) {
+          name.textContent = input.files.length > 1
+            ? `${input.files.length} fichiers sélectionnés`
+            : input.files[0].name;
+          name.classList.add('visible');
+        }
+      });
+      area.addEventListener('dragover', e => { e.preventDefault(); area.classList.add('dragover'); });
+      area.addEventListener('dragleave', () => area.classList.remove('dragover'));
+      area.addEventListener('drop', e => {
+        e.preventDefault();
+        area.classList.remove('dragover');
+        if (e.dataTransfer.files.length) {
+          input.files = e.dataTransfer.files;
+          name.textContent = e.dataTransfer.files.length > 1
+            ? `${e.dataTransfer.files.length} fichiers`
+            : e.dataTransfer.files[0].name;
+          name.classList.add('visible');
+        }
+      });
+    }
+
+    bindFileDisplay('fileInput1', 'fileArea1', 'fileName1');
+    bindFileDisplay('fileInput2', 'fileArea2', 'fileName2');
+
+    // ── Form submit handler ──
+    function handleUpload(formId, statusId, webhookUrl, btnId, spinnerId, btnTextId, fileNameId) {
+      const form    = document.getElementById(formId);
+      const status  = document.getElementById(statusId);
+      const btn     = document.getElementById(btnId);
+      const spinner = document.getElementById(spinnerId);
+      const btnTxt  = document.getElementById(btnTextId);
+      const fname   = document.getElementById(fileNameId);
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        status.textContent = '';
+
+        // Validate
+        const fileInput = form.querySelector('input[type="file"]');
+        if (!fileInput.files.length) {
+          showToast('Veuillez sélectionner un fichier.', 'error'); return;
+        }
+        const select = form.querySelector('select');
+        if (select && !select.value) {
+          showToast('Veuillez choisir un type de document.', 'error'); return;
         }
 
-        // Initialize the upload handlers
-        handleUpload('attendanceForm', 'attendanceStatus', 'https://jaber-2121.app.n8n.cloud/webhook/amenardi-upload');
-        handleUpload('invoiceForm', 'invoiceStatus', 'https://jaber-2121.app.n8n.cloud/webhook/updated-ocr');
-    </script>
+        // Loading
+        btn.disabled = true;
+        spinner.style.display = 'block';
+        btnTxt.textContent = 'Envoi…';
+        status.style.color = 'var(--muted)';
+        status.textContent = '⏳ Envoi en cours…';
+
+        try {
+          const formData = new FormData(form);
+          const res = await fetch(webhookUrl, { method: 'POST', body: formData });
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
+          status.style.color = 'var(--success)';
+          status.textContent = '✓ Envoyé avec succès';
+          showToast('Envoyé avec succès ✓', 'success');
+          form.reset();
+          fname.textContent = '— aucun fichier —';
+          fname.classList.remove('visible');
+        } catch (err) {
+          status.style.color = 'var(--error)';
+          status.textContent = '✕ Erreur — vérifiez votre connexion';
+          showToast(`Erreur : ${err.message}`, 'error');
+        } finally {
+          btn.disabled = false;
+          spinner.style.display = 'none';
+          btnTxt.textContent = 'Envoyer';
+        }
+      });
+    }
+
+    handleUpload('attendanceForm', 'attendanceStatus',
+      'https://jaber-2121.app.n8n.cloud/webhook/amenardi-upload',
+      'submitBtn1', 'spinner1', 'btnText1', 'fileName1');
+
+    handleUpload('invoiceForm', 'invoiceStatus',
+      'https://jaber-2121.app.n8n.cloud/webhook/updated-ocr',
+      'submitBtn2', 'spinner2', 'btnText2', 'fileName2');
+  </script>
 </body>
 </html>
